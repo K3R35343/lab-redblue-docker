@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  kali:
+    image: kalilinux/kali-rolling
+    container_name: kali
+    tty: true
+    stdin_open: true
+    command: /bin/bash
+    networks:
+      - lab-net
+
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    ports:
+      - "3000:3000"
+    networks:
+      - lab-net
+
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: dvwa
+    ports:
+      - "8080:80"
+    restart: always
+    networks:
+      - lab-net
+
+  wazuh:
+    image: wazuh/wazuh:latest
+    container_name: wazuh
+    ports:
+      - "5601:5601"
+      - "1514:1514/udp"
+      - "1515:1515"
+      - "55000:55000"
+    networks:
+      - lab-net
+
+networks:
+  lab-net:
+    driver: bridge
